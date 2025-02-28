@@ -1,16 +1,19 @@
 class Solution {
 public:
     bool isAnagram(string s, string t) {
-        int arr[123];
-        int arr2[123];
-        for(int i = 0;i<s.size();++i)
-           arr[s[i]]++; 
-        for(int i = 0;i<t.size();++i)
-            arr2[t[i]]++;
-        for(int i = 97;i<=122;++i)
-            if(arr[i] !=arr2[i])
+        if(s.size()!=t.size())
+            return false;
+        int sArr[27] ={0};
+        int tArr[27] = {0};
+        for(int i = 0 ;i<s.size();++i){
+            sArr[s[i] - 'a']++;
+            tArr[t[i] - 'a']++;
+        }
+        for(int i = 0;i<27;++i){
+            if(sArr[i] != tArr[i])
                 return false;
-        
+        }
         return true;
+
     }
 };
