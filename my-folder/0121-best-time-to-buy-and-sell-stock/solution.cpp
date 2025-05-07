@@ -1,23 +1,27 @@
 class Solution {
 public:
-int maxProfit(vector<int>& prices) {
-        int curMin = prices[0];
-        int curMax = prices[0];
-        int diff = 0;
-        for(size_t i = 1;i<prices.size();++i){
-            if(prices[i] < curMin){
-                if(curMax - curMin > diff)
-                    diff = curMax - curMin;
-                curMax = -1;
-                curMin = prices[i];
-            } else {
-                if(prices[i] > curMax)
-                    curMax = prices[i];
-            }
+    int maxProfit(vector<int>& prices) {
+        int memo[100001][2];
+        memset(memo,-1,sizeof(memo));
+        return solve(0,1,prices,memo);
+    }
+
+    int solve(int day ,bool canBuy,vector<int>&prices,int memo[][2]){
+        if(day == prices.size()){
+            return 0;
         }
 
-        if(curMax - curMin > diff)
-            diff = curMax - curMin;
+        if(memo[day][canBuy] != -1)
+            return memo[day][canBuy];
 
-        return diff;
-}};
+        if(canBuy){
+            int buy = -prices[day] + solve(day+1,0,prices,memo);
+            int skip = solve(day+1,1,prices,memo);
+            return memo[day][canBuy] =  max(buy,skip);
+        } else {
+            int skip = solve(day+1,0,prices,memo);
+            
+            return memo[day][canBuy] =  max(prices[day],skip);
+        }
+    }
+};
