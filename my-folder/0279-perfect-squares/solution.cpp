@@ -1,42 +1,26 @@
 class Solution {
 public:
+    vector<vector<int>> memo;
 
+    int dp(int i, int curSum, int &n, vector<int> &p) {
+        if (curSum == n) return 0;
+        if (i >= p.size() || curSum > n) return 1e9;
 
-    bool isPerfectSquare(long long x)
-    {
-        // Find floating point value of
-        // square root of x.
-        if (x >= 0) {
+        if (memo[i][curSum] != -1) return memo[i][curSum];
 
-            long long sr = sqrt(x);
-            
-            // if product of square root 
-            //is equal, then
-            // return T/F
-            return (sr * sr == x);
-        }
-        // else return false if n<0
-        return false;
+        int take = dp(i, curSum + p[i], n, p) + 1;
+        int leave = dp(i + 1, curSum, n, p);
+
+        return memo[i][curSum] = min(take, leave);
     }
-    int memo[10001];
-    int numSquares(int n){
-        memset(memo,-1,sizeof(memo));
-        return solve(n);
-    }
-    int solve(int n) {
-        if(n == 0)
-            return 0;
-        int minim = 1e9;
-        auto &ret = memo[n];
-        if(ret!=-1) return ret;
-        for(int i = 1; i * i <= n; i++){
-            int rem = n - (i * i);
-                int &least_num_sqs = memo[rem];
-                if(least_num_sqs == -1){
-                    least_num_sqs = numSquares(rem);
-                }
-                minim = min(minim,least_num_sqs+1);
-        }        
-        return ret = minim;
+
+    int numSquares(int n) {
+        int i = 1;
+        vector<int> perfectSquares;
+        while (i * i <= n) perfectSquares.push_back(i * i++);
+        // Initialize memo with dimensions: number of perfect squares x (n+1)
+        memo.assign(perfectSquares.size(), vector<int>(n + 1, -1));
+        return dp(0, 0, n, perfectSquares);
     }
 };
+
