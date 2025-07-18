@@ -1,30 +1,26 @@
 class Solution {
 public:
-    int minDistance(string word1, string word2) {
-        int memo[501][501];
-        memset(memo,-1,sizeof(memo));
-        return solve(0,0,word1,word2,memo);
+    int memo[501][501];
+    int dp(int index_1,int index_2, string &word1, string &word2){
+        if(index_1 == word1.size()){
+            return word2.size() - index_2;
+        }
+        if(index_2 == word2.size()){
+            return word1.size() - index_1;
+        }
+        auto &ret = memo[index_1][index_2];
+        if(ret != -1) return ret;
+        if(word1[index_1] == word2[index_2]){
+            return ret = dp(index_1+1,index_2+1,word1,word2);
+        }
+        int delete_ = dp(index_1+1,index_2,word1,word2) + 1;
+        int delete_2 = dp(index_1,index_2+1,word1,word2) + 1;
+        int replace = dp(index_1+1,index_2+1,word1,word2) + 1;
+        //try to replace
+        return ret = min(min(delete_,delete_2),replace);
     }
-    
-    int solve(int idx1, int idx2,string &word1, string &word2,int(&memo)[501][501]){
-        if(idx1 == word1.size()){
-            return word2.size() - idx2;
-        }
-
-        if(idx2 == word2.size()){
-            return word1.size() - idx1;
-        }
-        auto &ret = memo[idx1][idx2];
-        if(ret != -1)
-            return ret;
-        if(word1[idx1] == word2[idx2]){
-            return ret = solve(idx1+1,idx2+1,word1,word2,memo);
-        }
-
-        int change = 1 + solve(idx1+1,idx2+1,word1,word2,memo);
-        int insert_ = 1 + solve(idx1,idx2 +1,word1,word2,memo);
-        int delete_ = 1 + solve(idx1+1,idx2,word1,word2,memo);
-
-        return ret = min(min(change,insert_),delete_);
+    int minDistance(string word1, string word2) {
+        memset(memo,-1,sizeof(memo));  
+        return dp(0,0,word1,word2);    
     }
 };
