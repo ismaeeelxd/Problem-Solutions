@@ -11,17 +11,24 @@
  */
 class Solution {
 public:
-    void invert(TreeNode* root){
-        if(root == nullptr) return;
-        invert(root->left);
-        invert(root->right);
-        TreeNode* temp = root->right;
-        root->right = root->left;
-        root->left = temp;
-    }
     TreeNode* invertTree(TreeNode* root) {
         if(!root) return root;
-        invert(root);
+        rec(root);
         return root;
+    }
+
+    void rec(TreeNode* root) {
+        if(!root) return;
+        if(root->right && root->left) swap(root->right,root->left);
+        else if(root->right) {
+            root->left = root->right;
+            root->right = nullptr;
+        } 
+        else if(root->left){
+            root->right = root->left;
+            root->left = nullptr;
+        }
+        rec(root->right);
+        rec(root->left);
     }
 };
