@@ -11,26 +11,13 @@
  */
 class Solution {
 public:
-    vector<int> path;
-    void traverse(TreeNode* p){
-        if(!p) {
-         path.push_back(1e8);
-         return;   
-        }
-        path.push_back(p->val);
-        traverse(p->left);
-        traverse(p->right);
-    }
     bool isSameTree(TreeNode* p, TreeNode* q) {
-        traverse(p);
-        vector<int> path_1 = path;
-        path.clear();
-        traverse(q);
-        vector<int> path_2 = path;
-        if(path_1 == path_2){
-            return true;
-        } 
-        return false;
+        return rec(p,q);
+    }
 
+    bool rec(TreeNode* p, TreeNode* q) {
+        if (!p && !q) return true;
+        if(!p && q || !q && p || p->val != q->val) return false;
+        return rec(p->left, q->left) && rec(p->right , q->right);
     }
 };
