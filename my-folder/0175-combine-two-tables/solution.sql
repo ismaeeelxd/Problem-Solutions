@@ -1,2 +1,3 @@
-# Write your MySQL query statement below
-SELECT Person.firstName, Person.lastName, Address.city, Address.state FROM PERSON LEFT JOIN Address ON Person.personId = Address.personId;
+-- Write your PostgreSQL query statement below
+SELECT p.firstName as firstName, p.lastName as lastName, ad.city, ad.state FROM Person AS p
+LEFT JOIN Address AS ad ON p.personId = ad.personId
