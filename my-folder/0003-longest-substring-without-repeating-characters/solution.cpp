@@ -1,18 +1,31 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        int left = 0;
-        int right = 0;
-        set<char> se;
-        int maxWindow = 0;
-        while(left <= right && right < s.size()){
-            if(se.contains(s[right])){
-                while(se.contains(s[right])) se.erase(s[left++]);
+        unordered_map<int,int> mp;
+        int max_ = 0;
+        for(int i = 0; i < s.size(); ++i) {
+            int c = s[i];
+            if(!mp.count(c)) {
+                mp[c] = i;
+                int sz = mp.size();
+                max_ = max(sz, max_);
             }
-
-            se.insert(s[right++]);
-            maxWindow = max(maxWindow, right - left);
+            else {
+                int oldIndex = mp[c]; // 0
+                vector<int> toBeDeleted;
+                for(auto &[character, index] : mp) {
+                    if(index <= oldIndex) toBeDeleted.push_back(character);
+                } 
+                for(auto character : toBeDeleted) {
+                    mp.erase(character);
+                }
+                mp[c] = i;
+                int sz = mp.size();
+                max_ = max(sz, max_);
+            }  
         }
-        return maxWindow;
+
+        return max_;
+
     }
 };
