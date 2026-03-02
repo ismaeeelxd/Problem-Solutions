@@ -11,11 +11,11 @@
  */
 class Solution {
 public:
-    int count(TreeNode* root){
+    int count(TreeNode* root) {
         if(!root) return 0;
-        int leftNodes = count(root->left);
-        int rightNodes = count(root->right);
-        return leftNodes + rightNodes + 1;
+        int rightNodes = count(root->right) + 1;
+        int leftNodes = count(root->left) + 1;
+        return rightNodes + leftNodes - 1;
     }
     int countNodes(TreeNode* root) {
         return count(root);
